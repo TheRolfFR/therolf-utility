@@ -1,6 +1,6 @@
 {
   "name": "therolf-utility",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Personal utility tool built with ElectronJS",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,8 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "electron": "^8.2.0",
-    "electron-store": "^5.1.1"
+    "electron-store": "^5.1.1",
+    "url-exists": "^1.0.3"
   },
   "devDependencies": {}
 }

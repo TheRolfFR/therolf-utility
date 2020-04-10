@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TwitchOnTop</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <link rel="stylesheet" href="https://therolf.fr/css/base.css">
+  <style>
+    body {
+      padding: 0 1em;
+      margin: 0;
+    }
+
+    html,
+    body,
+    form,
+    #loader {
+      height: 100%;
+    }
+
+    #buttons {
+      position: fixed;
+      top: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      border-radius: 0 0 0 0.5em;
+      overflow: hidden;
+      transition: all .2s;
+    }
+
+    #buttons.hidden {
+      opacity: 0;
+    }
+
+    #buttons .mdl-button {
+      height: auto;
+      line-height: auto;
+      min-width: auto;
+      padding: 2px 8px;
+      color: white;
+    }
+
+    #buttons .mdl-button span {
+      font-size: 20px;
+    }
+
+    #buttons #move {
+      cursor: move; /* fallback if grab cursor is unsupported */
+	    -webkit-app-region: drag;
+    }
+
+    body>form>*,
+    #loader>* {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    body>form>div {
+      width: 100%;
+    }
+
+    body>form>span,
+    #loader>span {
+      height: 100%;
+    }
+
+    .mdl-textfield {
+      width: 100%;
+    }
+
+    #loader,
+    #streampart {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+    }
+
+    #loader {
+      background: rgba(255, 255, 255, 0.7);
+      text-align: center;
+    }
+
+    #streampart>* {
+      display: inline-flex;
+      height: 100%;
+    }
+
+    #streampart #stream {
+      width: calc(100% - 300px);
+    }
+
+    #streampart #chat {
+      position: absolute;
+      top: 0;
+      left: calc(100% - 300px);
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="buttons">
+    <button id="move" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+      <span class="material-icons">
+        drag_indicator
+      </span>
+    </button><button id="exit" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+      <span class="material-icons">
+        exit_to_app
+      </span>
+    </button><button id="minimize" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+      <span class="material-icons">
+        minimize
+      </span>
+    </button><button id="close" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+      <span class="material-icons">
+        close
+      </span>
+    </button>
+  </div>
+
+  <form action="#">
+    <div>
+      <h2 class="display-2">Twitch URL</h2>
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" id="url">
+        <label class="mdl-textfield__label" for="sample1">Text...</label>
+      </div>
+      <div class="mdl-typography--text-right">
+        <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          Submit
+        </button>
+      </div>
+    </div><span></span>
+  </form>
+
+  <div id="loader">
+    <div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div><span></span>
+  </div>
+
+  <div id="streampart">
+    <webview id="stream" src="" allowpopups></webview>
+    <webview id="chat" src=""></webview>
+  </div>
+
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <script>
+    let remote, urlExists, ipcRenderer, streamer = null
+
+    document.addEventListener('DOMContentLoaded', () => {
+      remote = require('electron').remote
+      urlExists = require('url-exists')
+      ipcRenderer = require('electron').ipcRenderer
+
+      ipcRenderer.on('focus', (event, arg) => {
+        if(arg) {
+          document.getElementById('buttons').classList.remove('hidden')
+        } else {
+          document.getElementById('buttons').classList.add('hidden')
+        }
+      })
+
+      const url = ipcRenderer.sendSync('getLastTwitchUrl')
+      document.getElementById('url').value = url
+
+      document.getElementsByTagName('form')[0].addEventListener('submit', (e) => {
+        e.preventDefault()
+        const value = document.getElementById('url').value
+
+        document.getElementById('loader').style.display = 'block';
+        urlExists(value, function (err, exists) {
+          document.getElementById('loader').style.display = 'none';
+          if (exists) {
+            ipcRenderer.send('setLastTwitchUrl', value)
+            const tmp = value.split('/').pop()
+
+            document.getElementById('streampart').style.display = 'block';
+            if(streamer !== tmp) {
+              streamer = tmp
+              document.getElementById('stream').src = 'https://player.twitch.tv/?channel=' + streamer + '&enableExtensions=true&player=popout';
+              document.getElementById('chat').src = 'https://www.twitch.tv/popout/' + streamer + '/chat?popout='
+            } else {
+              document.getElementById('stream').setAudioMuted(false)
+              document.getElementById('chat').setAudioMuted(false)
+            }
+          }
+        });
+      })
+
+      document.getElementById('exit').addEventListener('click', () => {
+        document.getElementById('stream').setAudioMuted(true)
+        document.getElementById('chat').setAudioMuted(true)
+        document.getElementById('streampart').style.display = 'none'
+      })
+
+      document.getElementById('minimize').addEventListener('click', () => {
+        remote.getCurrentWindow().minimize()
+      })
+
+      document.getElementById('close').addEventListener('click', () => {
+        remote.getCurrentWindow().close()
+      })
+    })
+    /* document.addEventListener('contextmenu', () => {
+      remote.getCurrentWindow().close()
+    }) */
+  </script>
+</body>
+
+</html>
