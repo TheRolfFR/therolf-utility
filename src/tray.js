@@ -15,7 +15,7 @@ let items = [
 // on ready function
 const onReady = () => {
   // create the tray
-  _tray = new Tray('./src/img/icon.ico')
+  _tray = new Tray(__dirname + '/img/icon.ico')
   // set its tooltip name
   _tray.setToolTip('TheRolf Utility')
   // build and set its context menu

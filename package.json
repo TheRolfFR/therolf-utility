@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node_modules\\.bin\\electron .",
-    "build": "electron-packager . builds/therolf-utility --platform=win32 --arch=x64 --icon=img/icon.ico --asar --overwrite"
+    "build": "electron-packager . --platform=win32 --icon=src/img/icon.ico --out=./dist --asar --overwrite"
   },
   "keywords": [
     "therolf",
