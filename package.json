@@ -4,7 +4,7 @@
   "description": "Personal utility tool built with ElectronJS",
   "main": "index.js",
   "scripts": {
-    "start": "node_modules\\electron\\dist\\electron.exe .",
+    "start": "node_modules\\.bin\\electron .",
     "build": "electron-packager . builds/therolf-utility --platform=win32 --arch=x64 --icon=img/icon.ico --asar --overwrite"
   },
   "keywords": [
