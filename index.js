@@ -4,6 +4,7 @@ const autoLaunch = require('./src/autolaunch')
 const monitorChange = require('./src/monitor-change')
 const tray = require('./src/tray')
 const twitch = require('./src/twitch-on-top')
+const colorpicker = require('./src/colorpicker')
 
 autoLaunch('Therolf Utility') // set autolaunch name
 const store = new Store() // init store
@@ -14,6 +15,7 @@ app.on('ready', () => {
 
   tray.items.push(monitorChange.trayItem) // adds the monitor item
   tray.items.push(twitch.trayItem) // adds the twitch on top item
+  tray.items.push(colorpicker.trayItem) // adds colorpicker tray item
   tray.onReady() // starts the tray
 })
 
