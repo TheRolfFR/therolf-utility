@@ -55,7 +55,7 @@ const startTwitchOnTop = () => {
     twitchWindow.on('blur', () => twitchWindow.webContents.send('focus', false))
   } else {
     // else show the damn window
-    if (twitchWindow.is) twitchWindow.show()
+    twitchWindow.show()
   }
 }
 
