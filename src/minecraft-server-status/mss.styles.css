@@ -1,0 +1,139 @@
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #151515;
+}
+
+*:not(.material-icons) {
+  font-family: 'Noto Sans', sans-serif !important;
+}
+
+body {
+  background: #212121;
+  background-image: url(../img/bg-wool-dark.png);
+  background-size: 50%;
+  color: white;
+  text-align: center;
+  padding-top: 46px;
+}
+
+#buttons {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: #34aa2f;
+  border: 3px solid green;
+  border-color: #62f91f #62f91f #247721 #247721;
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+#buttons.hidden {
+  opacity: 0;
+}
+
+#buttons .mdl-button {
+  height: auto;
+  line-height: auto;
+  min-width: auto;
+  padding: 2px 8px;
+  color: white;
+}
+
+#buttons .mdl-button span {
+  font-size: 20px;
+}
+
+#buttons #move {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  -webkit-app-region: drag;
+  color: #247721;
+}
+
+#content {
+  height: 100%;
+  padding: 5px;
+  overflow: auto;
+}
+#content > * {
+  padding: 10px 0;
+}
+
+#server_ip {
+  padding: 15px 0;
+  word-wrap: break-word;
+  font-weight: 700;
+}
+#icon {
+  display: none;
+}
+#icon.shown {
+  display: initial;
+}
+#motd {
+  padding-top: 0;
+}
+
+#status {
+  font-weight: 600;
+}
+.online {
+  color: green;
+}
+.offline {
+  color: red;
+}
+
+#players {
+  display: inline-block;
+  text-align: left;
+  margin: 3px 0;
+}
+#players img {
+  margin: 2px;
+}
+
+#collapsible {
+  cursor: pointer;
+}
+#collapsible:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+#collapsible.shown .material-icons {
+  transform: scaleY(-1);
+}
+#collapsible + * {
+  display: none;
+}
+#collapsible.shown + * {
+  display: initial;
+}
+.ttp {
+  font-size: 16px;
+  font-weight: 700;
+}
+#trackedPlayers {
+  margin: 10px 0;
+}
+#trackedPlayers img {
+  margin: 2px;
+}
+#form * {
+  color: white !important;
+}
+#form input {
+  outline: none;
+  border-bottom-color: white;
+}
+#form button {
+  width: 100%;
+  background: white;
+  border-radius: 0px;
+  color: #1d1e1e !important;
+  font-weight: 700;
+  margin-bottom: 15px;
+}

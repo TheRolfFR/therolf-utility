@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minecraft Server Status</title>
+    <link rel="stylesheet" href="http://therolf.fr/css/base.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.grey-deep_orange.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="mss.styles.css" />
+  </head>
+
+  <body>
+    <div id="buttons">
+      <button id="move" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+        <span class="material-icons">
+          drag_indicator
+        </span></button
+      ><button id="minimize" action="minimize" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+        <span class="material-icons">
+          minimize
+        </span></button
+      ><button id="close" action="close" class="mdl-button mdl-js-button mdl-js-ripple-effect">
+        <span class="material-icons">
+          close
+        </span>
+      </button>
+    </div>
+
+    <div id="content">
+      <div id="server_ip" class="mdl-typography--display-1"></div>
+      <div><img id="icon" src="" alt="icon" /></div>
+      <div id="motd"></div>
+
+      <div>Status: <span id="status"></span></div>
+
+      <div>
+        Players connected:
+        <div>
+          <div id="players" class="middle"></div>
+        </div>
+      </div>
+
+      <div id="collapsible" class="ttp middle noselect"><span class="material-icons">expand_more</span> <span></span>Tracked players</span></div>
+      <div>
+        <div id="trackedPlayers" class="middle"></div>
+        <div id="form">
+          <div class="ttp">Toggle player to track</div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="playerTrackInput" />
+            <label class="mdl-textfield__label" for="playerTrackInput">Type pseudo here</label>
+          </div>
+          <button id="toggleButton" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+            TOGGLE TRACKING
+          </button>
+        </div>
+      </div>
+      <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+      <script src="https://unpkg.com/@popperjs/core@2"></script>
+      <script src="https://unpkg.com/tippy.js@6"></script>
+      <script src="mss.renderer.js"></script>
+    </div>
+  </body>
+</html>

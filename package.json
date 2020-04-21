@@ -1,7 +1,8 @@
 {
   "name": "therolf-utility",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Personal utility tool built with ElectronJS",
+  "productName": "TheRolf Utility",
   "main": "index.js",
   "scripts": {
     "start": "node_modules\\.bin\\electron .",
@@ -19,12 +20,13 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "electron-store": "^5.1.1",
+    "https": "^1.0.0",
     "iohook": "^0.6.5",
     "robotjs": "^0.6.0",
     "url-exists": "^1.0.3"
   },
   "devDependencies": {
-    "electron": "@8.1.1",
+    "electron": "8.1.1",
     "electron-packager": "^14.2.1",
     "electron-rebuild": "^1.10.1",
     "node-abi": "^2.15.0"

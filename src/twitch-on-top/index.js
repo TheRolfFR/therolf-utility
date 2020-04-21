@@ -41,10 +41,7 @@ const startTwitchOnTop = () => {
     })
 
     // move it in the bottom right
-    twitchWindow.setPosition(
-      screen.getPrimaryDisplay().size.width - 1076,
-      screen.getPrimaryDisplay().size.height - 438 - 50
-    )
+    twitchWindow.setPosition(screen.getPrimaryDisplay().size.width - 1076, screen.getPrimaryDisplay().size.height - 438 - 50)
     // load the player
     twitchWindow.loadFile('./src/twitch-on-top/twitch.html')
 
