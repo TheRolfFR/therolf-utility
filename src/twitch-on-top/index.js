@@ -60,6 +60,6 @@ const startTwitchOnTop = () => {
 }
 
 module.exports = {
-  trayItem: { label: 'Start Twitch On Top', click: () => startTwitchOnTop() }, // the item for the tray
+  trayItem: { label: 'Open Twitch On Top', click: () => startTwitchOnTop() }, // the item for the tray
   init: init
 }

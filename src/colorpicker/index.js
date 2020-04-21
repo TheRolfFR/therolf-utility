@@ -18,19 +18,8 @@ const rectifyWindowPosition = pos => {
   const screenSize = screen.getPrimaryDisplay().size
 
   return {
-    x:
-      pos.x + MARGIN + WINDOW_SIZE < screenSize.width
-        ? pos.x + MARGIN
-        : pos.x - MARGIN - WINDOW_SIZE,
-    y:
-      pos.y + MARGIN + WINDOW_SIZE < screenSize.height - WINDOWS_TASKBAR_HEIGHT
-        ? pos.y + MARGIN
-        : pos.y -
-          MARGIN -
-          WINDOW_SIZE +
-          (pos.y >= screenSize.height - WINDOWS_TASKBAR_HEIGHT
-            ? -(pos.y - (screenSize.height - WINDOWS_TASKBAR_HEIGHT))
-            : 0)
+    x: pos.x + MARGIN + WINDOW_SIZE < screenSize.width ? pos.x + MARGIN : pos.x - MARGIN - WINDOW_SIZE,
+    y: pos.y + MARGIN + WINDOW_SIZE < screenSize.height - WINDOWS_TASKBAR_HEIGHT ? pos.y + MARGIN : pos.y - MARGIN - WINDOW_SIZE + (pos.y >= screenSize.height - WINDOWS_TASKBAR_HEIGHT ? -(pos.y - (screenSize.height - WINDOWS_TASKBAR_HEIGHT)) : 0)
   }
 }
 
@@ -120,7 +109,7 @@ const launchColorPicker = () => {
 
 module.exports = {
   trayItem: {
-    label: 'Launch color picker',
+    label: 'Open color picker',
     click: () => {
       launchColorPicker()
     }

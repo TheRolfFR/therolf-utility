@@ -1,4 +1,4 @@
-const { app, ipcMain } = require('electron')
+const { app } = require('electron')
 const Store = require('electron-store')
 const autoLaunch = require('./src/autolaunch')
 const monitorChange = require('./src/monitor-change')
