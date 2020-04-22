@@ -17,7 +17,7 @@ mss.setServerIP('minecraftutbm.fr:10154') // setting server url
 app.on('ready', () => {
   monitorChange.init(store) // init store for monitor change
 
-  tray.items.push(autoLaunch.trayItem()) // adds the auto launch checkbox option
+  tray.items.push(autoLaunch.trayItem) // adds the auto launch checkbox option
   tray.items.push(monitorChange.trayItem) // adds the monitor item
   tray.items.push(twitch.trayItem) // adds the twitch on top item
   tray.items.push(colorpicker.trayItem) // adds colorpicker tray item

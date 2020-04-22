@@ -35,7 +35,5 @@ module.exports = {
       tray.setChecked(isEnabled)
     })
   },
-  trayItem: () => {
-    return menuItem
-  }
+  trayItem: menuItem
 }
