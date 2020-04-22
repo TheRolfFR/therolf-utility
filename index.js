@@ -9,13 +9,14 @@ const mss = require('./src/minecraft-server-status')
 
 autoLaunch.start('Therolf Utility') // set autolaunch name
 const store = new Store() // init store
+monitorChange.setStore(store) // setting store for monitor change
 twitch.init(store) // init event handling for twitch
 mss.setStore(store) // adding store to the mss
 
 mss.setServerIP('minecraftutbm.fr:10154') // setting server url
 
 app.on('ready', () => {
-  monitorChange.init(store) // init store for monitor change
+  monitorChange.onReady() // init store for monitor change
 
   tray.items.push(autoLaunch.trayItem) // adds the auto launch checkbox option
   tray.items.push(monitorChange.trayItem) // adds the monitor item
