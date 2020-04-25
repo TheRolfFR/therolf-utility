@@ -14,6 +14,8 @@ let iconElement
 let ipElement
 let motdElement
 let statusElement
+let playerNumberElement
+let maxPlayerElement
 let playersElement
 
 let collapsible
@@ -28,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ipElement = document.getElementById('server_ip')
   motdElement = document.getElementById('motd')
   statusElement = document.getElementById('status')
+  playerNumberElement = document.getElementById('pn')
+  maxPlayerElement = document.getElementById('mp')
   playersElement = document.getElementById('players')
 
   buttons.forEach(item => {
@@ -43,10 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 10000)
 
   ipcRenderer.on('getInfos', (_event, data) => {
-    const { ip, status, players, motd } = data
+    const { ip, status, players, motd, max } = data
 
     console.log('getting infos...')
-    console.log(ip, status, players, motd)
+    console.log(ip, status, players, motd, max)
 
     iconElement.src = 'https://api.mcsrvstat.us/icon/' + ip
     iconElement.classList.add('shown')
@@ -58,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
     statusElement.classList.add(statusElement.innerText.toLowerCase())
 
     if (!players) return
+
+    playerNumberElement.innerText = players.length
+    maxPlayerElement.innerText = max
 
     tippy.hideAll()
     playersElement.innerHTML = ''

@@ -14,6 +14,7 @@ let firstime = true
 let wasServerOffline = false
 let playerList = []
 let modt = ''
+let max = 0
 
 const getPlayersDifference = (oldPlayersList, newPlayersList) => {
   let loggedin = []
@@ -70,6 +71,8 @@ const getServerStatusUpdate = () => {
             _events.emit('server-online') // set change status to online
           }
 
+          max = server.players.max
+
           let newList = server.players.list || []
 
           const difference = getPlayersDifference(playerList, newList) // get the difference
@@ -114,8 +117,14 @@ module.exports = {
   getPlayerList: () => {
     return playerList
   },
+  getNumberOfPlayers: () => {
+    return playerList.length
+  },
   getMotd: () => {
     return modt
+  },
+  getMax: () => {
+    return max
   },
   listen: () => {
     if (!_serverIP) {

@@ -1,11 +1,15 @@
 const { BrowserWindow, Notification, ipcMain, screen, nativeImage } = require('electron')
 const mssapi = require('./mss.api')
 const mssstore = require('./mss.store')
+const { LogTable } = require('./mss.api.log')
 
 const WIDTH = 330
 const HEIGHT = 600
 
 let bw = null
+
+// create log table
+const logTable = new LogTable()
 
 const events = mssapi.events
 
@@ -42,7 +46,8 @@ ipcMain.on('requestInfos', () => {
       ip: mssapi.getServerIP(),
       status: mssapi.isServerOnline(),
       players: mssapi.getPlayerList(),
-      motd: mssapi.getMotd()
+      motd: mssapi.getMotd(),
+      max: mssapi.getMax()
     }
     bw.webContents.send('getInfos', data)
   }
@@ -129,8 +134,9 @@ events.on('players-list-loggedin', players => {
 
   players.forEach(newPlayerConnected => {
     if (trackingList.includes(newPlayerConnected)) {
-      console.log(players)
-      sendNotification(newPlayerConnected + ' just logged in') // notify the user of tracked players
+      logTable.updateEntry(newPlayerConnected, true, () => {
+        sendNotification(newPlayerConnected + ' just logged in') // notify the user of tracked players
+      })
     }
   })
 })
@@ -140,8 +146,9 @@ events.on('players-list-disconnected', players => {
 
   players.forEach(newPlayerConnected => {
     if (trackingList.includes(newPlayerConnected)) {
-      console.log(players)
-      sendNotification(newPlayerConnected + ' just logged out') // notify the user of tracked players
+      logTable.updateEntry(newPlayerConnected, false, () => {
+        sendNotification(newPlayerConnected + ' just logged out') // notify the user of tracked players
+      })
     }
   })
 })
