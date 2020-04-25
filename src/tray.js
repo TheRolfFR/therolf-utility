@@ -26,13 +26,8 @@ const onReady = () => {
   })
 }
 
-const check = checked => {
-  let foundIndex = -1
-  let i = 0
-  while (i < items.length && foundIndex == -1) {
-    if ('type' in items[i] && items[i].type == 'checkbox') foundIndex = i
-    ++i
-  }
+const check = (label, checked) => {
+  let foundIndex = items.findIndex(item => 'type' in item && item.type == 'checkbox' && item.label == label)
 
   if (foundIndex != -1) items[foundIndex].checked = checked
 

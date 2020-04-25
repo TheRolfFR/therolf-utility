@@ -6,7 +6,11 @@ const { LogTable } = require('./mss.api.log')
 const WIDTH = 330
 const HEIGHT = 600
 
+const MSS_NOTIFICATIONS_ENABLED_LABEL = 'Enable MSS notifications'
+
 let bw = null
+
+let initNotifOn = false
 
 // create log table
 const logTable = new LogTable()
@@ -23,20 +27,22 @@ const downloadIcon = () => {
 
 // More infos at https://www.electronjs.org/docs/api/notification
 const sendNotification = message => {
-  const notif = {
-    title: 'Minecraft Server Status',
-    subtitle: mssapi.getServerIP(), // MacOS only
-    body: message,
-    icon: _icon,
-    silent: true // no sound
-  }
-  const n = new Notification(notif)
-  n.show()
+  if (mssstore.areNotificationsOn()) {
+    const notif = {
+      title: 'Minecraft Server Status',
+      subtitle: mssapi.getServerIP(), // MacOS only
+      body: message,
+      icon: _icon,
+      silent: true // no sound
+    }
+    const n = new Notification(notif)
+    n.show()
 
-  // open window on notification
-  n.on('click', () => {
-    if (bw && !bw.isDestroyed()) openMSSWindow()
-  })
+    // open window on notification
+    n.on('click', () => {
+      if (bw && !bw.isDestroyed()) openMSSWindow()
+    })
+  }
 }
 
 // send infos to the window when asked
@@ -156,6 +162,7 @@ events.on('players-list-disconnected', players => {
 module.exports = {
   setStore: function (store) {
     mssstore.setStore(store)
+    initNotifOn = mssstore.areNotificationsOn()
   },
   setServerIP: function (serverUrl) {
     mssapi.setServerIP(serverUrl)
@@ -167,5 +174,11 @@ module.exports = {
   trayItem: {
     label: 'Open Minecraft Server Status',
     click: () => openMSSWindow()
+  },
+  muteTrayItem: {
+    label: MSS_NOTIFICATIONS_ENABLED_LABEL,
+    type: 'checkbox',
+    checked: initNotifOn,
+    click: () => mssstore.toggleNotifications(MSS_NOTIFICATIONS_ENABLED_LABEL)
   }
 }

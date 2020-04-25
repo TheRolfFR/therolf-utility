@@ -22,6 +22,7 @@ app.on('ready', () => {
   tray.items.push(monitorChange.trayItem) // adds the monitor item
   tray.items.push(twitch.trayItem) // adds the twitch on top item
   tray.items.push(colorpicker.trayItem) // adds colorpicker tray item
+  tray.items.push(mss.muteTrayItem) // adds minecraft server status checkbox mute item
   tray.items.push(mss.trayItem) // adds minecraft server status item
   tray.onReady() // starts the tray
 

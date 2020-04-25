@@ -1,4 +1,4 @@
-const DELAY = 1000
+const DELAY = 60000
 
 class LogEntry {
   /**
@@ -17,17 +17,19 @@ class LogEntry {
    * @returns {LogEntry} - himself
    */
   update(action, func) {
+    action = action == true
+
     if (typeof func != 'function') return this
 
-    if ((action == true) != this.action) {
+    if (action != this.action) {
       const d = new Date()
-      if ((d - this.time) / 1000 / 60 >= 1) {
+      if ((d - this.time) / DELAY >= 1) {
         this.time = d // update the last time
         func() // execute the function
       }
     }
 
-    this.action = action == true // false = logged out, true = logged in
+    this.action = action // false = logged out, true = logged in
     return this
   }
 }

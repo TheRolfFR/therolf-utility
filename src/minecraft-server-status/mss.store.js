@@ -1,10 +1,13 @@
+const tray = require('../tray')
 const SEPARATOR = '%%%'
 
 const TRACKING_STORE_KEY = 'tracking_store_key'
+const MSS_NOTIFICATIONS_KEY = 'mss_notification_key'
 
 let _store = undefined
 
 let trackingList = []
+let areNotificationsOn = true
 
 const toggleTracking = pseudo => {
   const foundIndex = trackingList.findIndex(element => element == pseudo)
@@ -21,16 +24,33 @@ const toggleTracking = pseudo => {
   return !found
 }
 
+// toggle boolean navigation and return the new state
+const toggleNotifications = label => {
+  areNotificationsOn = !areNotificationsOn
+
+  _store.set(MSS_NOTIFICATIONS_KEY, areNotificationsOn)
+  console.info('MSS notifcations are now ' + (areNotificationsOn ? 'en' : 'dis') + 'abled')
+
+  tray.setChecked(label, areNotificationsOn)
+
+  return areNotificationsOn
+}
+
 module.exports = {
   setStore: store => {
     _store = store
 
     if (!_store) return
 
+    areNotificationsOn = store.get(MSS_NOTIFICATIONS_KEY, true)
     trackingList = store.get(TRACKING_STORE_KEY, '').split(SEPARATOR)
   },
   toggleTracking: pseudo => toggleTracking(pseudo),
   getTrackingList: () => {
     return trackingList
-  }
+  },
+  areNotificationsOn: () => {
+    return areNotificationsOn
+  },
+  toggleNotifications: label => toggleNotifications(label)
 }

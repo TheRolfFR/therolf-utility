@@ -2,9 +2,11 @@ const { app } = require('electron')
 const AutoLaunch = require('auto-launch')
 const tray = require('./tray')
 
+const AUTOLAUNCH_LABEL = 'Enable auto launch'
+
 let autoLaunch
 let menuItem = {
-  label: 'Enable auto launch',
+  label: AUTOLAUNCH_LABEL,
   type: 'checkbox',
   click: toggleAutoLaunch
 }
@@ -19,7 +21,7 @@ async function toggleAutoLaunch() {
 
   console.info('Auto launch is now ' + (isEnabled ? 'dis' : 'en') + 'abled')
   // update menu item
-  tray.setChecked(!isEnabled)
+  tray.setChecked(AUTOLAUNCH_LABEL, !isEnabled)
 }
 
 // export
@@ -32,7 +34,7 @@ module.exports = {
     })
 
     autoLaunch.isEnabled().then(isEnabled => {
-      tray.setChecked(isEnabled)
+      tray.setChecked(AUTOLAUNCH_LABEL, isEnabled)
     })
   },
   trayItem: menuItem
