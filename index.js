@@ -6,6 +6,8 @@ const tray = require('./src/tray')
 const twitch = require('./src/twitch-on-top')
 const colorpicker = require('./src/colorpicker')
 const mss = require('./src/minecraft-server-status')
+// const pomodoro = require('./src/pomodoro-timer')
+const express = require('./src/deezer-rpc/server')
 
 autoLaunch.start('Therolf Utility') // set autolaunch name
 const store = new Store() // init store
@@ -24,6 +26,7 @@ app.on('ready', () => {
   tray.items.push(colorpicker.trayItem) // adds colorpicker tray item
   tray.items.push(mss.muteTrayItem) // adds minecraft server status checkbox mute item
   tray.items.push(mss.trayItem) // adds minecraft server status item
+  // tray.items.push(pomodoro.trayItem) // adds pomodoro timer item
   tray.onReady() // starts the tray
 
   mss.listen() // VERY IMPORTANT : listens to the api
@@ -31,3 +34,8 @@ app.on('ready', () => {
 
 // prevent app from closing when browserwindow closes
 app.on('window-all-closed', e => e.preventDefault())
+
+app.on('quit', () => {
+  express.client.destroy()
+  express.server.close()
+})
