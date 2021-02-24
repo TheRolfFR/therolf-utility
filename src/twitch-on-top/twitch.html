@@ -185,7 +185,7 @@
             document.getElementById('streampart').style.display = 'block';
             if(streamer !== tmp) {
               streamer = tmp
-              document.getElementById('stream').src = 'https://player.twitch.tv/?channel=' + streamer + '&enableExtensions=true&player=popout';
+              document.getElementById('stream').src = 'https://player.twitch.tv/?channel=' + streamer + '&parent=therolf.fr&enableExtensions=true&player=popout';
               document.getElementById('chat').src = 'https://www.twitch.tv/popout/' + streamer + '/chat?popout='
             } else {
               document.getElementById('stream').setAudioMuted(false)
