@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let rand
     for (let i = 0; i < players.length; ++i) {
       rand = Math.floor(Math.random() * 1000) // used not to have tippy bugs
-      playersElement.appendHTML('<img id="' + players[i] + rand + '-online" src="https://minotar.net/helm/' + players[i] + '/32" alt="' + players[i] + '" />')
+      playersElement.appendHTML('<img id="' + players[i] + rand + '-online" src="https://mc-heads.net/avatar/' + players[i] + '/32" alt="' + players[i] + '" />')
       tippy('#' + players[i] + rand + '-online', {
         content: players[i]
       })
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let rand
     for (let i = 0; i < players.length; i++) {
       rand = Math.floor(Math.random() * 1000) // used not to have tippy bugs
-      trackedPlayers.appendHTML('<img id="' + players[i] + rand + '-tracked" src="https://minotar.net/helm/' + players[i] + '/32" alt="' + players[i] + '" />')
+      trackedPlayers.appendHTML('<img id="' + players[i] + rand + '-tracked" src="https://mc-heads.net/avatar/' + players[i] + '/32" alt="' + players[i] + '" />')
       tippy('#' + players[i] + rand + '-tracked', {
         content: players[i]
       })
