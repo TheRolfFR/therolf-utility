@@ -1,4 +1,6 @@
 const { ipcMain, app, BrowserWindow, screen } = require('electron')
+const { join } = require('path')
+const urlExists = require('url-exists')
 
 // store twitch url key
 const TWITCH_URL = 'twitch_url'
@@ -20,20 +22,25 @@ const init = store => {
   })
 }
 
+console.log(__dirname)
+
 let twitchWindow = null
 const startTwitchOnTop = () => {
   if (!twitchWindow || twitchWindow.isDestroyed()) {
     // if no browser window, create it
     twitchWindow = new BrowserWindow({
       title: 'Twitch On Top',
-      icon: './img/icon.ico',
-      skipTaskbar: true,
+      icon: join(__dirname, '../img/icon.ico'),
+      skipTaskbar: false,
       alwaysOnTop: true,
-      //autoHideMenuBar: true,
+      // autoHideMenuBar: true,
       frame: false,
       show: false,
       webPreferences: {
-        nodeIntegration: true,
+        contextIsolation: false,
+        enableRemoteModule: false,
+        nodeIntegration: false,
+        preload: join(__dirname, 'preload.js'),
         webviewTag: true
       },
       width: 1076,
@@ -49,6 +56,31 @@ const startTwitchOnTop = () => {
     twitchWindow.on('ready-to-show', () => {
       twitchWindow.show()
     })
+
+    ipcMain.handle('minimize', () => {
+      console.log('minimize')
+      if (twitchWindow) {
+        twitchWindow.minimize()
+      }
+    })
+
+    ipcMain.handle('close', () => {
+      if (twitchWindow) {
+        twitchWindow.close()
+      }
+    })
+
+    ipcMain.on('urlexists', (_event, url) => {
+      urlExists(url, (err, exists) => {
+        twitchWindow.webContents.send('urlexistsresponse', {
+          err: err,
+          exists: exists
+        })
+      })
+    })
+
+    // open dev tools
+    //twitchWindow.webContents.openDevTools()
 
     // give focus events
     twitchWindow.on('focus', () => twitchWindow.webContents.send('focus', true))
