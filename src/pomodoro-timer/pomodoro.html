@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="https://therolf.fr/css/base.css" />
+    <link rel="stylesheet" href="pomodoro.styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pomodoro Timer</title>
+  </head>
+
+  <body class="middle">
+    <div id="container">
+      <h3 id="title">Pomodoro Timer</h3>
+      <div id="tomato" class="middle">
+        <div>
+          <button id="start" event="start-timer">Start</button><br>
+          <button id="pause" event="pause-timer">Pause</button>
+        </div>
+        <img src="../img/tomato.svg" alt="tomato">
+        <div>
+          <button id="resume" event="resume-timer">Resume</button><br>
+          <button id="stop" event="stop-timer">Stop</button>
+        </div>
+      </div>
+      <div>
+        Period : <span id="period" class=""></span>
+      </div>
+      <div id="result">
+      </div>
+    </div><span class="taille"></span>
+  </body>
+  <script>
+    const eventNames = require('./event-names.js')
+    const { ipcRenderer } = require('electron')
+
+    let periodElement
+    let countdownElement
+
+    let buttons
+
+    let min, sec
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // set elements
+      periodElement = document.getElementById('period')
+      countdownElement = document.getElementById('result')
+
+      ipcRenderer.on(eventNames.COUNTDOWN_EVENT, (event, args) => {
+        // set period
+        periodElement.innerText = args.period
+        periodElement.attributes.class.value = args.period.toLowerCase().replace(' ', '-') // change classe
+
+        // set countdown
+        min = Math.floor(args.countdown / 60)
+        sec = args.countdown % 60
+        countdownElement.innerText = `Time Left  : ${min}min ${sec}sec`
+      })
+
+      // set buttons
+      buttons = document.querySelectorAll('#tomato button')
+
+      buttons.forEach((btn) => {
+        let event = btn.attributes.event.value
+        btn.addEventListener('click', () => {
+          console.log(event)
+          ipcRenderer.send(event, null)
+        })
+      })
+    })
+  </script>
+</html>

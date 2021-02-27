@@ -1,0 +1,51 @@
+body {
+  background: #eee;
+  text-align: center;
+}
+
+#container > * {
+  margin: 5px 0;
+}
+
+#tomato > * {
+  margin: 0 5px;
+}
+
+#tomato button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  border: 1px solid rgba(0,0,0,0.3);
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+#tomato button:hover {
+  border-width: 2px;
+  padding: 3px 7px;
+}
+
+#tomato button:active {
+  margin-top: 5px;
+  margin-bottom: 1px;
+}
+
+#tomato #start {
+  background-color: #4CAF50;
+}
+
+#tomato #pause {
+  background-color: #FF5722;
+}
+
+#tomato #resume {
+  background-color: #0D47A1;
+}
+
+#tomato #stop {
+  background-color: #f44336;
+}
+
+#tomato img {
+  height: 80px;
+}
