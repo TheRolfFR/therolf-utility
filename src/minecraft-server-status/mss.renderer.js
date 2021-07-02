@@ -1,7 +1,8 @@
+/* global Element, tippy */
 const { ipcRenderer } = require('electron')
 
 Element.prototype.appendHTML = function (str) {
-  var div = document.createElement('div')
+  const div = document.createElement('div')
   div.innerHTML = str
   while (div.children.length > 0) {
     this.appendChild(div.children[0])
@@ -17,6 +18,7 @@ let statusElement
 let playerNumberElement
 let maxPlayerElement
 let playersElement
+let ipInputElement
 
 let collapsible
 let trackedPlayers
@@ -33,11 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
   playerNumberElement = document.getElementById('pn')
   maxPlayerElement = document.getElementById('mp')
   playersElement = document.getElementById('players')
+  ipInputElement = document.getElementById('server_ip_input')
 
   buttons.forEach(item => {
     item.addEventListener('click', function () {
       ipcRenderer.send('mss:action', this.attributes.action.value)
     })
+  })
+
+  ipElement.addEventListener('click', () => {
+    ipInputElement.style.display = 'block'
+    ipInputElement.focus()
+  })
+
+  ipInputElement.addEventListener('keydown', (e) => {
+    if ((e.which || e.keyCode) === 13) {
+      e.preventDefault()
+      ipInputElement.style.display = 'none'
+      ipcRenderer.send('requestInfos', ipInputElement.value)
+    }
   })
 
   ipcRenderer.send('requestInfos')
@@ -52,16 +68,25 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('getting infos...')
     console.log(ip, status, players, motd, max)
 
+    // set text
     iconElement.src = 'https://api.mcsrvstat.us/icon/' + ip
     iconElement.classList.add('shown')
     ipElement.innerText = ip
     motdElement.innerHTML = motd
 
-    statusElement.classList.remove('offline', 'online')
-    statusElement.innerText = status == true ? 'Online' : 'Offline'
+    // change empty text field with stored ip
+    if (ipInputElement.value === '') ipInputElement.value = ip
+
+    statusElement.classList = []
+    statusElement.innerText = status === true ? 'Online' : 'Offline'
     statusElement.classList.add(statusElement.innerText.toLowerCase())
 
-    if (!players) return
+    if (status === false) {
+      playerNumberElement.innerText = '???'
+      maxPlayerElement.innerText = '???'
+      motdElement.innerHTML = ''
+      return
+    }
 
     playerNumberElement.innerText = players.length
     maxPlayerElement.innerText = max

@@ -29,9 +29,8 @@ monitorChange.setStore(store) // setting store for monitor change
 twitch.init(store) // init event handling for twitch
 mss.setStore(store) // adding store to the mss
 
-mss.setServerIP('minecraftutbm.fr:10154') // setting server url
-
 app.on('ready', () => {
+  mss.onReady() // iinit store value for mss
   monitorChange.onReady() // init store for monitor change
 
   trayModule.items.push(autoLaunch.trayItem) // adds the auto launch checkbox option

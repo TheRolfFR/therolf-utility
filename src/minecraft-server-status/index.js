@@ -2,6 +2,7 @@ const { BrowserWindow, Notification, ipcMain, screen, nativeImage } = require('e
 const mssapi = require('./mss.api')
 const mssstore = require('./mss.store')
 const { LogTable } = require('./mss.api.log')
+const path = require('path')
 
 const WIDTH = 330
 const HEIGHT = 600
@@ -46,7 +47,14 @@ const sendNotification = message => {
 }
 
 // send infos to the window when asked
-ipcMain.on('requestInfos', () => {
+ipcMain.on('requestInfos', (event, arg) => {
+  if (arg !== undefined) {
+    mssstore.setServerIP(arg)
+  }
+
+  mssapi.setServerIP(mssstore.getServerIP())
+  mssapi.update()
+
   if (bw && !bw.isDestroyed()) {
     const data = {
       ip: mssapi.getServerIP(),
@@ -109,10 +117,10 @@ const openMSSWindow = () => {
       }
     })
 
-    //moving the window
+    // moving the window
     bw.setPosition(screen.getPrimaryDisplay().size.width - WIDTH - 10, screen.getPrimaryDisplay().size.height - HEIGHT - 50)
 
-    bw.loadFile(__dirname + '/mss.index.html')
+    bw.loadFile(path.join(__dirname, '/mss.index.html'))
 
     // bw.webContents.openDevTools() // open devtools
 
@@ -160,6 +168,10 @@ events.on('players-list-disconnected', players => {
 })
 
 module.exports = {
+  onReady: function () {
+    mssapi.setServerIP(mssstore.getServerIP())
+    mssapi.update()
+  },
   setStore: function (store) {
     mssstore.setStore(store)
     initNotifOn = mssstore.areNotificationsOn()

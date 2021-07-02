@@ -126,6 +126,7 @@ module.exports = {
   getMax: () => {
     return max
   },
+  update: () => getServerStatusUpdate(),
   listen: () => {
     if (!_serverIP) {
       throw new Error('Server IP not defined')
