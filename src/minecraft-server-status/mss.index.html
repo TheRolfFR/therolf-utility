@@ -34,8 +34,11 @@
       <div><img id="icon" src="" alt="icon" /></div>
       <div id="motd"></div>
 
-      <div>Status: <span id="status"></span></div>
+      <div>Status: <span id="status"></span> <span style="display: none;" id="modded"><b><i> + MODDED</i></b></span></div>
 
+      <div style="display: none;" id="modsc" class="ttp middle noselect collapsible"><span class="material-icons">expand_more</span> <span></span>Mods (<span id='modscounter'></span>)</span></div>
+      <div id="mods"></div>
+      
       <div>
         Players connected: <span id="pn"></span>/<span id="mp"></span>
         <div>
@@ -43,7 +46,7 @@
         </div>
       </div>
 
-      <div id="collapsible" class="ttp middle noselect"><span class="material-icons">expand_more</span> <span></span>Tracked players</span></div>
+      <div class="ttp middle noselect collapsible"><span class="material-icons">expand_more</span> <span></span>Tracked players</span></div>
       <div>
         <div id="trackedPlayers" class="middle"></div>
         <div id="form">

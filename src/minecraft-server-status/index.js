@@ -61,7 +61,9 @@ ipcMain.on('requestInfos', (event, arg) => {
       status: mssapi.isServerOnline(),
       players: mssapi.getPlayerList(),
       motd: mssapi.getMotd(),
-      max: mssapi.getMax()
+      max: mssapi.getMax(),
+      modded: mssapi.isModded(),
+      mods: mssapi.getMods()
     }
     bw.webContents.send('getInfos', data)
   }

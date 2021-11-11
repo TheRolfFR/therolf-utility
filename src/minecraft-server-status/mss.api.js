@@ -1,4 +1,5 @@
 const https = require('https')
+const axios = require('axios').default
 const EventEmitter = require('events')
 const icond = require('./mss.api.icondownloader')
 
@@ -15,6 +16,14 @@ let wasServerOffline = false
 let playerList = []
 let modt = ''
 let max = 0
+let modded
+let mods
+
+const instance = axios.create({
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false
+  })
+})
 
 const getPlayersDifference = (oldPlayersList, newPlayersList) => {
   let loggedin = []
@@ -44,62 +53,49 @@ const getPlayersDifference = (oldPlayersList, newPlayersList) => {
 const getServerStatusUpdate = () => {
   const url = 'https://api.mcsrvstat.us/2/' + _serverIP // defining the URL
 
-  https
-    .get(url, resp => {
-      let data = ''
+  instance.get(url)
+    .then(res => {
+      let server = undefined
+      server = res.data
+      
+      if (!server) return
 
-      // A chunk of data has been recieved.
-      resp.on('data', chunk => {
-        data += chunk
-      })
-
-      resp.on('end', () => {
-        let server = undefined
-
-        try {
-          server = JSON.parse(data)
-        } catch (error) {
-          console.error(error)
-          return
+      if (server.online) {
+        if (wasServerOffline) {
+          wasServerOffline = false
+          _events.emit('server-online') // set change status to online
         }
 
-        if (!server) return
+        max = server.players.max
 
-        if (server.online) {
-          if (wasServerOffline) {
-            wasServerOffline = false
-            _events.emit('server-online') // set change status to online
-          }
+        let newList = server.players.list || []
 
-          max = server.players.max
+        const difference = getPlayersDifference(playerList, newList) // get the difference
+        // notify the difference
+        if (!firstime && difference.loggedin.length > 0) _events.emit('players-list-loggedin', difference.loggedin)
+        if (difference.disconnected.length > 0) _events.emit('players-list-disconnected', difference.disconnected)
 
-          let newList = server.players.list || []
+        // update player list
+        playerList = newList
+        _events.emit('player-list-updated', playerList)
 
-          const difference = getPlayersDifference(playerList, newList) // get the difference
-          // notify the difference
-          if (!firstime && difference.loggedin.length > 0) _events.emit('players-list-loggedin', difference.loggedin)
-          if (difference.disconnected.length > 0) _events.emit('players-list-disconnected', difference.disconnected)
+        modded = server.mods !== undefined
+        mods = modded ? (server.mods.names || []) : []
 
-          // update player list
-          playerList = newList
-          _events.emit('player-list-updated', playerList)
-
-          // update message of the day
-          modt = server.motd.html
-          _events.emit('modt', modt)
-        } else {
-          if (!wasServerOffline) {
-            wasServerOffline = true
-            _events.emit('server-offline') // change status to offline
-          }
+        // update message of the day
+        modt = server.motd.html
+        _events.emit('modt', modt)
+      } else {
+        if (!wasServerOffline) {
+          wasServerOffline = true
+          _events.emit('server-offline') // change status to offline
         }
+      }
 
-        firstime = false
-      })
+      firstime = false
     })
-    .on('error', err => {
-      console.error(err)
-      return
+    .catch((...arg) => {
+      console.error(...arg)
     })
 }
 
@@ -144,5 +140,7 @@ module.exports = {
   },
   getIcon: () => {
     return icond.downloadIcon(_serverIP)
-  }
+  },
+  isModded : () => { return modded },
+  getMods: () => { return mods }
 }

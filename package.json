@@ -20,6 +20,7 @@
   "license": "NPOSL-3.0",
   "dependencies": {
     "auto-launch": "^5.0.5",
+    "axios": "^0.24.0",
     "bl": "^4.0.3",
     "discord-rpc": "^3.1.4",
     "electron-store": "^5.1.1",

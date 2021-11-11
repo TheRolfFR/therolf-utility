@@ -106,19 +106,19 @@ body {
   margin: 2px;
 }
 
-#collapsible {
+.collapsible {
   cursor: pointer;
 }
-#collapsible:hover {
+.collapsible:hover {
   background: rgba(0, 0, 0, 0.2);
 }
-#collapsible.shown .material-icons {
+.collapsible.shown .material-icons {
   transform: scaleY(-1);
 }
-#collapsible + * {
+.collapsible + * {
   display: none;
 }
-#collapsible.shown + * {
+.collapsible.shown + * {
   display: initial;
 }
 .ttp {

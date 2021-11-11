@@ -15,12 +15,16 @@ let iconElement
 let ipElement
 let motdElement
 let statusElement
+let moddedElement
+let modscElement
+let modsCountElement
+let modsElement
 let playerNumberElement
 let maxPlayerElement
 let playersElement
 let ipInputElement
 
-let collapsible
+let collapsibles
 let trackedPlayers
 let toggleButton
 let playerTrackInput
@@ -32,6 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
   ipElement = document.getElementById('server_ip')
   motdElement = document.getElementById('motd')
   statusElement = document.getElementById('status')
+  moddedElement = document.getElementById('modded')
+  modscElement = document.getElementById('modsc')
+  modsCountElement = document.getElementById('modscounter')
+  modsElement = document.getElementById('mods')
   playerNumberElement = document.getElementById('pn')
   maxPlayerElement = document.getElementById('mp')
   playersElement = document.getElementById('players')
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 10000)
 
   ipcRenderer.on('getInfos', (_event, data) => {
-    const { ip, status, players, motd, max } = data
+    const { ip, status, players, motd, max, modded, mods } = data
 
     console.log('getting infos...')
     console.log(ip, status, players, motd, max)
@@ -80,6 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
     statusElement.classList = []
     statusElement.innerText = status === true ? 'Online' : 'Offline'
     statusElement.classList.add(statusElement.innerText.toLowerCase())
+
+    // if modded
+    moddedElement.style.display = modded ? 'initial' : 'none';
+    modscElement.style.display = modded ? 'initial' : 'none';
+    modsElement.innerHTML = ''
+    modsCountElement.innerText = mods.length
+    mods.forEach(m => {
+      modsElement.appendHTML('<span>' + m + '</span> ')
+    })
+
+    // mods list
 
     if (status === false) {
       playerNumberElement.innerText = '???'
@@ -103,10 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   })
 
-  collapsible = document.getElementById('collapsible')
-  collapsible.addEventListener('click', () => {
-    collapsible.classList.toggle('shown')
-  })
+  collapsibles = document.getElementsByClassName('collapsible')
+  for(let i = 0; i < collapsibles.length; ++i) {
+    collapsibles[i].addEventListener('click', () => {
+      collapsibles[i].classList.toggle('shown')
+    })
+  }
 
   trackedPlayers = document.getElementById('trackedPlayers')
   playerTrackInput = document.getElementById('playerTrackInput')
